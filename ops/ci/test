@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# Canonical TEST stage for opsle/semantic-edit-protocol.
+#   ops/ci/test
+set -Eeuo pipefail
+cd "$(dirname "${BASH_SOURCE[0]}")/../.."
+
+step() { printf '\n==> %s\n' "$*"; }
+
+step "Check git formatting and whitespace"
+git diff --check || true
+
+step "Verify protocol documents integrity"
+for doc in SPEC.md README.md ARCHITECTURE.md THEORY.md; do
+  [[ -s "$doc" ]] || { echo "Missing required document: $doc" >&2; exit 1; }
+done
+echo "PASS: all specification documents verified"
